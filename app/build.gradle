@@ -1,0 +1,84 @@
+repositories {
+  mavenCentral()
+  maven { url "https://jitpack.io" }
+  maven { url "https://clojars.org/repo/" }
+  maven { url 'https://oss.jfrog.org/libs-snapshot' }
+}
+
+apply plugin: 'com.android.application'
+
+android {
+  compileSdkVersion 25
+  buildToolsVersion "25.0.0"
+  defaultConfig {
+    applicationId "com.emredirican.hbsample"
+    minSdkVersion 21
+    targetSdkVersion 25
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner 'com.emredirican.hbsample.TestRunner'
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  packagingOptions {
+    exclude 'META-INF/rxjava.properties'
+  }
+}
+
+dependencies {
+  final VC_ESPRESSO = '2.2.2'
+  final VC_DEX_MAKER = '1.4'
+  final VC_DAGGER = '2.8'
+  final VC_PLAY_SERVICE = '10.0.1'
+  final VC_RETROFIT = '2.1.0'
+  final VC_BUTTER_KNIFE = '8.3.0'
+  final VC_RX_ANDROID = '2.0.1'
+  final VC_AUTO_PARCEL = '1.0.3'
+
+  def mockito = 'org.mockito:mockito-core:1.10.19'
+  def daggerCompiler = "com.google.dagger:dagger-compiler:$VC_DAGGER"
+
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  compile "com.android.support:appcompat-v7:$VC_SUPPORT"
+  compile "com.android.support:design:$VC_SUPPORT"
+
+  compile "com.squareup.retrofit2:retrofit:$VC_RETROFIT"
+  compile "com.squareup.retrofit2:converter-gson:$VC_RETROFIT"
+  compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+
+  compile "com.google.dagger:dagger-android:$VC_DAGGER"
+  annotationProcessor daggerCompiler
+
+  compile "com.jakewharton:butterknife:$VC_BUTTER_KNIFE"
+  annotationProcessor "com.jakewharton:butterknife-compiler:$VC_BUTTER_KNIFE"
+  provided "frankiesardo:auto-parcel:$VC_AUTO_PARCEL"
+  annotationProcessor "frankiesardo:auto-parcel:$VC_AUTO_PARCEL"
+  compile 'com.google.auto.factory:auto-factory:1.0-beta3'
+
+  compile "io.reactivex.rxjava2:rxandroid:$VC_RX_ANDROID"
+  compile "io.reactivex.rxjava2:rxjava:$VC_RX_ANDROID"
+
+  compile 'com.jakewharton.timber:timber:4.5.1'
+
+  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+  releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+  testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+  testCompile 'junit:junit:4.12'
+  testCompile mockito
+
+  androidTestCompile "com.android.support.test.espresso:espresso-intents:$VC_ESPRESSO"
+  androidTestCompile "com.android.support.test.espresso:espresso-contrib:$VC_ESPRESSO"
+  androidTestCompile "com.android.support:support-annotations:$VC_SUPPORT" //resolve diff
+  androidTestCompile "com.android.support:design:$VC_SUPPORT" //resolve diff
+  androidTestCompile "com.android.support:appcompat-v7:$VC_SUPPORT" //resolve diff
+  androidTestCompile "com.squareup:javawriter:2.5.1" //resolve diff with espresso 2.2
+  androidTestAnnotationProcessor daggerCompiler
+}
