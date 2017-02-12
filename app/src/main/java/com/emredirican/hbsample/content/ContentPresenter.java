@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
 
+import static com.emredirican.hbsample.util.scheduler.SchedulerModule.MAIN;
+
 @PerApplication public class ContentPresenter implements Content.Presenter {
 
   private final Content.Interactor interactor;
@@ -15,7 +17,7 @@ import timber.log.Timber;
   private WeakReference<Content.View> view;
 
   @Inject public ContentPresenter(
-      Content.Interactor interactor, @Named("Main") Scheduler observingScheduler
+      Content.Interactor interactor, @Named(MAIN) Scheduler observingScheduler
   ) {
     this.interactor = interactor;
     this.observingScheduler = observingScheduler;

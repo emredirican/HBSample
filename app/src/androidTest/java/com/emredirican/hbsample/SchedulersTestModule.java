@@ -6,14 +6,17 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import javax.inject.Named;
 
+import static com.emredirican.hbsample.util.scheduler.SchedulerModule.IO;
+import static com.emredirican.hbsample.util.scheduler.SchedulerModule.MAIN;
+
 @Module
 public class SchedulersTestModule {
 
-  @Named("IO") @Provides public Scheduler provideIOScheduler() {
+  @Named(IO) @Provides public Scheduler provideIOScheduler() {
     return AndroidSchedulers.mainThread();
   }
 
-  @Named("Main") @Provides public Scheduler provideUIScheduler() {
+  @Named(MAIN) @Provides public Scheduler provideUIScheduler() {
     return AndroidSchedulers.mainThread();
   }
 }

@@ -8,13 +8,15 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.emredirican.hbsample.util.scheduler.SchedulerModule.IO;
+
 @PerApplication public class ContentInteractor implements Content.Interactor {
 
   private final ContentService contentService;
   private final Scheduler subscribingScheduler;
 
   @Inject public ContentInteractor(
-      ContentService contentService, @Named("IO") Scheduler subscribingScheduler
+      ContentService contentService, @Named(IO) Scheduler subscribingScheduler
   ) {
     this.contentService = contentService;
     this.subscribingScheduler = subscribingScheduler;

@@ -33,13 +33,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
 
+import static com.emredirican.hbsample.util.rest.RestServicesModule.FOR_REST;
+import static com.emredirican.hbsample.util.scheduler.SchedulerModule.MAIN;
+
 public class DisplayContentActivity extends ContentActivity implements Content.View {
   public static final String DATA = "data";
 
   @Inject Content.Presenter presenter;
   @Inject ViewStateVisitor viewStateVisitor;
-  @Inject @Named("ForRest") Gson gson;
-  @Inject @Named("Main") Scheduler schedulerMain;
+  @Inject @Named(FOR_REST) Gson gson;
+  @Inject @Named(MAIN) Scheduler schedulerMain;
 
   @BindView(R.id.rv_display_content) RecyclerView recyclerView;
 
