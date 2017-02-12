@@ -14,6 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module public class RestServicesModule {
 
+  public static final String FOR_REST = "ForRest";
+
   @Provides public OkHttpClient provideClient(@LoggingInterceptor Interceptor loggingInterceptor) {
     return new OkHttpClient.Builder().addInterceptor(loggingInterceptor).build();
   }
@@ -22,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
     return new HttpLoggingInterceptor();
   }
 
-  @Provides public Converter.Factory provideGsonConverterFactory(@Named("ForRest") Gson gson) {
+  @Provides public Converter.Factory provideGsonConverterFactory(@Named(FOR_REST) Gson gson) {
     return GsonConverterFactory.create(gson);
   }
 
@@ -30,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
     return RxJava2CallAdapterFactory.create();
   }
 
-  @Named("ForRest") @Provides public Gson provideGsonForRest() {
+  @Named(FOR_REST) @Provides public Gson provideGsonForRest() {
     return new Gson();
   }
 

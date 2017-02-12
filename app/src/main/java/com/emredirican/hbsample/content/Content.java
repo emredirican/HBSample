@@ -4,12 +4,12 @@ import io.reactivex.Observable;
 
 public interface Content {
 
-  public interface View {
+  interface View {
 
     void render(ContentViewState viewState);
   }
 
-  public interface Presenter {
+  interface Presenter {
 
     void update();
 
@@ -18,7 +18,7 @@ public interface Content {
     void detachView();
   }
 
-  public interface Interactor {
+  interface Interactor {
 
     Observable<ContentViewState> remainingSeconds();
   }

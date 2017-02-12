@@ -28,7 +28,7 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:label="@string/activity_display_content">
 
-      <meta-second
+      <meta-data
           android:name="android.support.PARENT_ACTIVITY"
           android:value=".content.fetch.FetchContentActivity"/>
       />

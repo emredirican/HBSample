@@ -22,24 +22,23 @@ import timber.log.Timber;
   }
 
   @Override public void update() {
-    interactor.remainingSeconds()
-        .observeOn(observingScheduler)
-        .subscribe(new DefaultObserver<ContentViewState>() {
-          @Override public void onNext(ContentViewState value) {
-            if (view != null) {
-              view.get().render(value);
-            }
-          }
+    DefaultObserver<ContentViewState> observer = new DefaultObserver<ContentViewState>() {
+      @Override public void onNext(ContentViewState value) {
+        if (view != null) {
+          view.get().render(value);
+        }
+      }
 
-          @Override public void onError(Throwable e) {
-            Timber.e(e.getMessage());
-            //TODO
-          }
+      @Override public void onError(Throwable e) {
+        Timber.e(e.getMessage());
+        //TODO
+      }
 
-          @Override public void onComplete() {
-            //nothing to do for now
-          }
-        });
+      @Override public void onComplete() {
+        //nothing to do for now
+      }
+    };
+    interactor.remainingSeconds().observeOn(observingScheduler).subscribe(observer);
   }
 
   @Override public void attachView(Content.View view) {

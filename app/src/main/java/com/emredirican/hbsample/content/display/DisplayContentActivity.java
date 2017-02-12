@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -42,15 +43,8 @@ public class DisplayContentActivity extends ContentActivity implements Content.V
 
   @BindView(R.id.rv_display_content) RecyclerView recyclerView;
 
-  private DisplayContentActivityComponent component;
   private SecondsViewAdapter secondsViewAdapter;
   private DisposableObserver<Long> timerObserver;
-
-  @Override protected void injectMembers(ApplicationComponent applicationComponent) {
-    component =
-        applicationComponent.displayContentComponent(new DisplayContentActivityModule(this));
-    component.inject(this);
-  }
 
   public static Intent createIntent(Context context, List<Response> responseList) {
     Intent intent = new Intent(context, DisplayContentActivity.class);
@@ -59,18 +53,30 @@ public class DisplayContentActivity extends ContentActivity implements Content.V
     return intent;
   }
 
+  @Override protected void injectMembers(ApplicationComponent applicationComponent) {
+    DisplayContentActivityComponent component =
+        applicationComponent.displayContentComponent(new DisplayContentActivityModule(this));
+    component.inject(this);
+  }
+
   @Override public void onCreate(
       Bundle savedInstanceState
   ) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_display_content);
     ButterKnife.bind(this);
+    initToolbar();
+    initRecyclerView();
+  }
+
+  private void initToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-
-    initRecyclerView();
+    ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) {
+      actionBar.setDisplayHomeAsUpEnabled(true);
+      actionBar.setDefaultDisplayHomeAsUpEnabled(true);
+    }
   }
 
   private void initRecyclerView() {
@@ -92,15 +98,7 @@ public class DisplayContentActivity extends ContentActivity implements Content.V
     timerObserver = new DisposableObserver<Long>() {
 
       @Override public void onNext(Long value) {
-        List<Second> secondList = secondsViewAdapter.dataListSnapshot();
-        for (Second second : secondList) {
-          second.value -= 1;
-          if (second.value == 0) {
-            presenter.update();
-            break;
-          }
-        }
-        secondsViewAdapter.update(secondList);
+        updateSecondViews();
       }
 
       @Override public void onError(Throwable e) {
@@ -112,6 +110,18 @@ public class DisplayContentActivity extends ContentActivity implements Content.V
       }
     };
     Observable.interval(1, 1, TimeUnit.SECONDS).observeOn(schedulerMain).subscribe(timerObserver);
+  }
+
+  private void updateSecondViews() {
+    List<Second> secondList = secondsViewAdapter.dataListSnapshot();
+    for (Second second : secondList) {
+      second.value -= 1;
+      if (second.value == 0) {
+        presenter.update();
+        break;
+      }
+    }
+    secondsViewAdapter.update(secondList);
   }
 
   @Override protected void onPause() {

@@ -9,11 +9,14 @@ import javax.inject.Named;
 
 @Module public class SchedulerModule {
 
-  @Named("IO") @Provides public Scheduler provideIOScheduler() {
+  public static final String IO = "IO";
+  public static final String MAIN = "Main";
+
+  @Named(IO) @Provides public Scheduler provideIOScheduler() {
     return Schedulers.io();
   }
 
-  @Named("Main") @Provides public Scheduler provideUIScheduler() {
+  @Named(MAIN) @Provides public Scheduler provideUIScheduler() {
     return AndroidSchedulers.mainThread();
   }
 }
